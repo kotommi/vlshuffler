@@ -1,0 +1,16 @@
+main {
+    max-width: 70ch;
+    padding: 2ch;
+    margin: auto;
+    color: black;
+    font-family: sans-serif;
+    font-size: 1em;
+}
+
+#inputs {
+    display: flex
+}
+
+#rowdiv {
+    border: solid 1px
+}
