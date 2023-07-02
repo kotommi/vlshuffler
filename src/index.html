@@ -6,14 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="shuffler.js" type="text/javascript"></script>
     <title>VL Bon shuffler</title>
-    <link rel="stylesheet" type="text/css" href="main.css"/>
+    <link rel="stylesheet" type="text/css" href="main.css" />
 </head>
 
 <body>
     <main>
         <div id="container">
             <h1>Shuffler</h1>
-            <p>Breaks horribly in many cases</p>
+            <p>Breaks horribly in many cases<br />
+                Place igns on separate lines<br />
+            </p>
             <div id="inputs">
                 <div>
                     <h5>Double boxes</h5>
@@ -25,8 +27,10 @@
                 </div>
             </div>
             <button onclick="shuffle()">Shuffle</button>
+            <div id="err" color="red" hidden="true"></div>
             <div id="rowdiv" hidden="true"></div>
-            
+
+
         </div>
     </main>
 </body>

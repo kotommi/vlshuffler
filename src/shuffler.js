@@ -39,12 +39,35 @@ function buildrows(doubles, singles) {
     return rows
 }
 
+const resetElements = () => {
+    const errDiv = document.getElementById("err")
+    errDiv.hidden = true
+    errDiv.textContent = null
+
+    const rowdiv = document.getElementById("rowdiv")
+    rowdiv.hidden = true
+    rowdiv.textContent = null
+
+}
+
 function shuffle() {
+
+    resetElements()
+
     const box = document.getElementById("namesarea")
     const namelist = box.value.split("\n").map(s => s.trim()).filter(s => s.length > 0)
 
     const singlebox = document.getElementById("singlearea")
     const singlelist = singlebox.value.split("\n").map(s => s.trim()).filter(s => s.length > 0)
+
+    const n = namelist.length + singlelist.length
+
+    if (n > 30 || n < 15) {
+        const errDiv = document.getElementById("err")
+        errDiv.textContent = `Invalid number of igns: ${n}`
+        errDiv.hidden = false
+        return
+    }
 
     const ratio = splitter(namelist, singlelist)
 
@@ -60,12 +83,11 @@ function shuffle() {
     })
     const rowdiv = document.getElementById("rowdiv")
     rowdiv.hidden = false
-    rowdiv.textContent = null
     prows.forEach(row => rowdiv.append(row))
 }
 
 function shuffleArray(array) {
-    var m = array.length, t, i;
+    let m = array.length, t, i;
 
     while (m) {
         i = Math.floor(Math.random() * m--);
