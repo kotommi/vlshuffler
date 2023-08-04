@@ -41,12 +41,12 @@ function buildrows(doubles, singles) {
 
 const resetElements = () => {
     const errDiv = document.getElementById("err")
-    errDiv.hidden = true
-    errDiv.textContent = null
+    errDiv?.hidden = true
+    errDiv?.textContent = null
 
     const rowdiv = document.getElementById("rowdiv")
-    rowdiv.hidden = true
-    rowdiv.textContent = null
+    rowdiv?.hidden = true
+    rowdiv?.textContent = null
 
 }
 
@@ -60,13 +60,26 @@ function shuffle() {
     const singlebox = document.getElementById("singlearea")
     const singlelist = singlebox.value.split("\n").map(s => s.trim()).filter(s => s.length > 0)
 
+    const allNames = namelist.concat(singlelist)
+    const names = new Map()
+    allNames.forEach(name => {
+        map.set(name, map.has(name) ? map.get(name) + 1 : 1)
+    })
+    singlelist.forEach(name => names.add(name))
+
     const n = namelist.length + singlelist.length
 
     if (n > 30 || n < 15) {
         const errDiv = document.getElementById("err")
         errDiv.textContent = `Invalid number of igns: ${n}`
         errDiv.hidden = false
-        return
+    }
+
+    if (names.size !== n) {
+        const errDiv = document.getElementById("err")
+        errDiv.textContent = errDiv.textContent + 
+                            `Duplicate names in lists: ${names.keys().filter(name => names.get(name) !== 1).join(', ')}`
+        errDiv.hidden = false;
     }
 
     const ratio = splitter(namelist, singlelist)
