@@ -54,6 +54,34 @@ const resetElements = () => {
 
 }
 
+function checkDupes(allNames, n) {
+    const names = new Map()
+    allNames.forEach(name => {
+        names.set(name, names.has(name) ? names.get(name) + 1 : 1)
+    })
+
+    if (names.size !== n) {
+        const errDiv = document.getElementById("err")
+        let dupes = []
+        for (const key of names.keys()) {
+            if (names.get(key) !== 1) {
+                dupes.push(key)
+            }
+        }
+        errDiv.textContent = errDiv.textContent +
+            `Duplicate names in lists: ${dupes.join(', ')}`
+        errDiv.hidden = false;
+    }
+}
+
+function checkRange(n) {
+    if (n > 30 || n < 15) {
+        const errDiv = document.getElementById("err")
+        errDiv.textContent = `Invalid number of igns: ${n}`
+        errDiv.hidden = false
+    }
+}
+
 function shuffle() {
 
     resetElements()
@@ -65,26 +93,10 @@ function shuffle() {
     const singlelist = singlebox.value.split("\n").map(s => s.trim()).filter(s => s.length > 0)
 
     const allNames = namelist.concat(singlelist)
-    const names = new Map()
-    allNames.forEach(name => {
-        map.set(name, map.has(name) ? map.get(name) + 1 : 1)
-    })
-    singlelist.forEach(name => names.add(name))
+    const n = allNames.length
 
-    const n = namelist.length + singlelist.length
-
-    if (n > 30 || n < 15) {
-        const errDiv = document.getElementById("err")
-        errDiv.textContent = `Invalid number of igns: ${n}`
-        errDiv.hidden = false
-    }
-
-    if (names.size !== n) {
-        const errDiv = document.getElementById("err")
-        errDiv.textContent = errDiv.textContent +
-            `Duplicate names in lists: ${names.keys().filter(name => names.get(name) !== 1).join(', ')}`
-        errDiv.hidden = false;
-    }
+    checkDupes(allNames, n)
+    checkRange(n)
 
     const ratio = splitter(namelist, singlelist)
 
