@@ -41,12 +41,16 @@ function buildrows(doubles, singles) {
 
 const resetElements = () => {
     const errDiv = document.getElementById("err")
-    errDiv?.hidden = true
-    errDiv?.textContent = null
-
+    if (errDiv) {
+        errDiv.hidden = true
+        errDiv.textContent = null
+    }
     const rowdiv = document.getElementById("rowdiv")
-    rowdiv?.hidden = true
-    rowdiv?.textContent = null
+    if (rowdiv) {
+        rowdiv.hidden = true
+        rowdiv.textContent = null
+    }
+
 
 }
 
@@ -77,8 +81,8 @@ function shuffle() {
 
     if (names.size !== n) {
         const errDiv = document.getElementById("err")
-        errDiv.textContent = errDiv.textContent + 
-                            `Duplicate names in lists: ${names.keys().filter(name => names.get(name) !== 1).join(', ')}`
+        errDiv.textContent = errDiv.textContent +
+            `Duplicate names in lists: ${names.keys().filter(name => names.get(name) !== 1).join(', ')}`
         errDiv.hidden = false;
     }
 
