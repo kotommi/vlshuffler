@@ -1,29 +1,29 @@
 function splitter(names, singles) {
-    // 2x + y = 30
-    // x + y = n
-    // y = n - x
-    // 2x + n - x = 30
-    // x = 30 - n
+    // 2a + b = 30
+    // a + b = n
+    // b = n - a
+    // 2a + n - a = 30
+    // a = 30 - n
     // x gets double box, y single.
     // works for 15 <= n <= 30
     const ALL_BOXES = 30
     const n = names.length
     const x = ALL_BOXES - n - singles.length
     const y = n - x
-    return { x, y }
+    return { x, y } // y == how many from the doublelist gets 1 box
 }
 
 function buildrows(doubles, singles) {
     const rows = []
     let row = "Row 1: "
     let idx = 1
-    let rowi = 1
+    let rowIndex = 1
     for (let i = 0; i < doubles.length; i++) {
         const name = doubles[i]
         row = row.concat(`${name} ${idx},${++idx} `)
         if (idx % 10 == 0) {
             rows.push(row)
-            row = `Row ${++rowi}: `
+            row = `Row ${++rowIndex}: `
         }
         idx++
     }
@@ -32,7 +32,7 @@ function buildrows(doubles, singles) {
         row = row.concat(`${name} ${idx} `)
         if (idx % 10 == 0) {
             rows.push(row)
-            row = `Row ${++rowi}: `
+            row = `Row ${++rowIndex}: `
         }
         idx++
     }
@@ -82,6 +82,29 @@ function checkRange(n) {
     }
 }
 
+function decideBoxes(ratio, namelist, singlelist) {
+    // 3 cases:
+    // Perfect split (e.g. 12 + 6, 13 + 4)
+    // Too many doubles: Have to push some doubles to singles
+    // Too little doubles: Have to pull from singles to doubles
+
+    const shuffledNames = shuffleArray(namelist)
+    const shuffledSingles = shuffleArray(singlelist)
+
+    let doubles = shuffledNames.slice(0, ratio['x']) // can slice past the end
+    const y = ratio['y']
+    let singles
+    if (y === 0) {
+        singles = shuffledSingles
+    } else if (y >= 0) {
+        singles = shuffledNames.slice(-y).concat(shuffledSingles)
+    } else if (y <= 0) {
+        doubles = doubles.concat(shuffledSingles.slice(0, -y))
+        singles = shuffledSingles.slice(-y, shuffledSingles.length)
+    }
+    return { doubles, singles }
+}
+
 function shuffle() {
 
     resetElements()
@@ -100,9 +123,7 @@ function shuffle() {
 
     const ratio = splitter(namelist, singlelist)
 
-    const shuffled = shuffleArray(namelist)
-    const doubles = shuffled.slice(0, ratio["x"])
-    const singles = ratio["y"] !== 0 ? shuffled.slice(-ratio["y"]).concat(singlelist) : singlelist
+    const { doubles, singles } = decideBoxes(ratio, namelist, singlelist)
 
     const rows = buildrows(doubles, singles)
     const prows = rows.map(row => {
@@ -126,3 +147,5 @@ function shuffleArray(array) {
     }
     return array;
 }
+
+module.exports = { decideBoxes, splitter }
